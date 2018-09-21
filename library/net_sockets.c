@@ -84,6 +84,10 @@ static int wsa_init_done = 0;
 #include <netdb.h>
 #include <errno.h>
 
+#ifdef NUTTX
+#include <sys/select.h>
+#endif
+
 #define IS_EINTR( ret ) ( ( ret ) == EINTR )
 
 #endif /* ( _WIN32 || _WIN32_WCE ) && !EFIX64 && !EFI32 */
@@ -119,7 +123,7 @@ static int net_prepare( void )
         wsa_init_done = 1;
     }
 #else
-#if !defined(EFIX64) && !defined(EFI32)
+#if !defined(EFIX64) && !defined(EFI32) && !defined(NUTTX)
     signal( SIGPIPE, SIG_IGN );
 #endif
 #endif
